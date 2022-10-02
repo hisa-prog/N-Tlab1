@@ -45,7 +45,7 @@ def send_message(mail:Mail):
     cSockSSL.send(f'Content-Type: application/audio; name="{mail.audio_name}"\r\n'.encode())
     cSockSSL.send("Content-Transfer-Encoding: base64\r\n".encode())
     cSockSSL.send("\r\n".encode())
-    cSockSSL.send(mail.audio.encode())
+    cSockSSL.send(mail.audio.split(',')[-1].encode())
     cSockSSL.send("\r\n".encode())
 
     cSockSSL.send("\r\n--MixedBoundaryString--\r\n".encode())
