@@ -56,7 +56,7 @@ def send_message(mail:Mail):
     cSockSSL.close()
     cSock.close()
 
-def get_list():
+def get_message():
     mailserver2 = 'pop.mail.ru'
     pSock = socket(AF_INET, SOCK_STREAM)
     pSock.connect((mailserver2, 995))
@@ -79,79 +79,13 @@ def get_list():
 
     pSockSSL.send('RETR 2\r\n'.encode())
     recv = pSockSSL.recv(1024)
-    print(recv.decode())
-    sleep(1)
-    recv = pSockSSL.recv(1024)
-    print(recv.decode())
-    sleep(1)
-    recv = pSockSSL.recv(1024)
-    print(recv.decode())
-    sleep(1)
-    recv = pSockSSL.recv(1024)
-    print(recv.decode())
-    sleep(1)
-    recv = pSockSSL.recv(1024)
-    print(recv.decode())
-    # for s in recv.decode().splitlines():
-    #     print(s)
-
-def delete_message():
-    mailserver2 = 'pop.mail.ru'
-    pSock = socket(AF_INET, SOCK_STREAM)
-    pSock.connect((mailserver2, 995))
-    pSockSSL = ssl.wrap_socket(pSock)
-    recv = pSockSSL.recv(1024)
-    print(recv)
-    print(recv)
-
-    pSockSSL.send('USER sitmailtest@mail.ru\r\n'.encode())
-    recv = pSockSSL.recv(1024)
-    print(recv)
-
-    pSockSSL.send('PASS q6NSTqBwvPrd7HBiTPsP\r\n'.encode())
-    recv = pSockSSL.recv(1024)
-    print(recv)
+    decoded_data = recv.decode().splitlines()
+    while decoded_data[-1] is not '.':
+        recv = pSockSSL.recv(1024)
+        decoded_data = recv.decode().splitlines()
+        print(recv.decode())
 
 
-    pSockSSL.send('stat\r\n'.encode())
-    recv = pSockSSL.recv(1024)
-    print(recv)
-
-    recv = recv.decode('utf-8')
-    lis = recv[4:7]
-
-    message_del = "dele "+ lis + "\r\n"
-    pSockSSL.send(message_del.encode())
-    recv = pSockSSL.recv(1024)
-    print("DELE: ", recv)
-
-    pSockSSL.send('QUIT\r\n'.encode())
-    rec = pSockSSL.recv(1024)
-    print('QUIT: ', rec.decode() )
-
-    pSockSSL.close()
-    pSock.close()
-
-get_list()
-# sock = socket()
-# sock.bind(('', 9090))
-# sock.listen(1)
-
-# conn, addr = sock.accept()
-# print('connected:', addr)
-# while True:
-    
-#     data = conn.recv(1024)
-#     if data.decode('utf-8') == 'quit':
-#         break
-#     if data.decode('utf-8') == 'del':
-#         delete_message()
-#     if data.decode('utf-8') == 'send':
-#         send_message()
-#     print(data.decode('utf-8'))
-
-
-# conn.close()
-# sock.close()
+get_message()
 
 
