@@ -1,12 +1,14 @@
+import axios from "axios";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
-  const [valueAddress, setValueAddress] = useState("");
-  const [valueSubject, setValueSubject] = useState("");
-  const [valueBody, setValueBody] = useState("");
+  const [valueAddress, setValueAddress] = useState("sitmailtest@mail.ru");
+  const [valueSubject, setValueSubject] = useState("test API");
+  const [valueBody, setValueBody] = useState("hui blyad");
   const [valueAudio, setValueAudio] = useState();
   const [valueAudioName, setValueAudioName] = useState("test.mp3");
+  const [valuePizdec, setPizdec] = useState(false)
 
   const handleInputAddress = (e: any) => {
     setValueAddress(e.target.value);
@@ -23,12 +25,13 @@ const Home: NextPage = () => {
   const handleInputAudio = (e: any) => {
     let file = e.target.files[0];
     // console.log(file);
-    setValueAudioName(file?.name)
+    setValueAudioName(file?.name);
     let reader = new FileReader();
-    reader.onloadend = function () { //@ts-ignore
-      setValueAudio(reader.result)
+    reader.onloadend = function () {
+      //@ts-ignore
+      setValueAudio(reader.result);
     };
-    if(file) reader.readAsDataURL(file);
+    if (file) reader.readAsDataURL(file);
     // setValueAudio(e.target.value);
   };
 
@@ -36,6 +39,19 @@ const Home: NextPage = () => {
     //@ts-ignore
     // console.log(valueAddress, valueSubject, valueBody, valueAudio, valueAudioName);
   }, [valueAddress, valueSubject, valueBody, valueAudio]);
+
+
+  const sendMessagePost = async () => {
+      console.log('xuii')
+      const response = await axios.post(`http://127.0.0.1:8000/send-mail`, {
+        "subject": valueSubject,
+        "body": valueBody,
+        "address": valueAddress,
+        "audio_name": valueAudioName,
+        "audio": valueAudio,
+      });
+      console.log(response);
+  }
 
   return (
     <div className="flex items-center justify-center mt-[20%]">
@@ -78,7 +94,7 @@ const Home: NextPage = () => {
             accept=".mp3"
           />
         </div>
-        <button className='mt-1 border rounded-md border-black w-max '>Жми, екарный бабай</button>
+        <div className="mt-1 border rounded-md border-black w-max cursor-pointer" onClick={() => sendMessagePost()}> Жми, екарный бабай</div>
       </div>
     </div>
   );
