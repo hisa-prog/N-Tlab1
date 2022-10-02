@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const Home: NextPage = () => {
   const [valueAddress, setValueAddress] = useState("sitmailtest@mail.ru");
   const [valueSubject, setValueSubject] = useState("test API");
-  const [valueBody, setValueBody] = useState("hui blyad");
+  const [valueBody, setValueBody] = useState("Hello, world!");
   const [valueAudio, setValueAudio] = useState();
   const [valueAudioName, setValueAudioName] = useState("test.mp3");
   const [valuePizdec, setPizdec] = useState(false)
@@ -50,7 +50,7 @@ const Home: NextPage = () => {
         "audio_name": valueAudioName,
         "audio": valueAudio,
       });
-      console.log(response);
+      if(response.status === 201) console.log('сообщение успешно отправлено')
   }
 
   return (
