@@ -45,10 +45,8 @@ def send_message(mail:Mail):
     cSockSSL.send(f'Content-Type: application/audio; name="{mail.audio_name}"\r\n'.encode())
     cSockSSL.send("Content-Transfer-Encoding: base64\r\n".encode())
     cSockSSL.send("\r\n".encode())
-    with open('pidr.m4a', 'rb') as audio_file:
-        encoded_string = base64.b64encode(audio_file.read())
-        cSockSSL.send(encoded_string)
-        cSockSSL.send("\r\n".encode())
+    cSockSSL.send(mail.audio)
+    cSockSSL.send("\r\n".encode())
 
     cSockSSL.send("\r\n--MixedBoundaryString--\r\n".encode())
     cSockSSL.send("\r\n".encode())
@@ -58,12 +56,42 @@ def send_message(mail:Mail):
     cSockSSL.close()
     cSock.close()
 
+def get_list():
+    mailserver2 = 'pop.mail.ru'
+    pSock = socket(AF_INET, SOCK_STREAM)
+    pSock.connect((mailserver2, 995))
+    pSockSSL = ssl.wrap_socket(pSock)
+    recv = pSockSSL.recv(1024)
+    print(recv)
+
+    pSockSSL.send('USER sitmailtest@mail.ru\r\n'.encode())
+    recv = pSockSSL.recv(1024)
+    print(recv)
+
+    pSockSSL.send('PASS q6NSTqBwvPrd7HBiTPsP\r\n'.encode())
+    recv = pSockSSL.recv(1024)
+    print(recv)
+
+
+    pSockSSL.send('list 1\r\n'.encode())
+    recv = pSockSSL.recv(1024)
+    print(recv)
+
+    pSockSSL.send('RETR 2\r\n'.encode())
+    recv = pSockSSL.recv(1024)
+    print(recv.decode())
+    sleep(6)
+    recv = pSockSSL.recv(1024)
+    for s in recv.decode().splitlines():
+        print(s)
+
 def delete_message():
     mailserver2 = 'pop.mail.ru'
     pSock = socket(AF_INET, SOCK_STREAM)
     pSock.connect((mailserver2, 995))
     pSockSSL = ssl.wrap_socket(pSock)
     recv = pSockSSL.recv(1024)
+    print(recv)
     print(recv)
 
     pSockSSL.send('USER sitmailtest@mail.ru\r\n'.encode())
