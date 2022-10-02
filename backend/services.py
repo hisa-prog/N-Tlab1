@@ -80,10 +80,20 @@ def get_list():
     pSockSSL.send('RETR 2\r\n'.encode())
     recv = pSockSSL.recv(1024)
     print(recv.decode())
-    sleep(6)
+    sleep(1)
     recv = pSockSSL.recv(1024)
-    for s in recv.decode().splitlines():
-        print(s)
+    print(recv.decode())
+    sleep(1)
+    recv = pSockSSL.recv(1024)
+    print(recv.decode())
+    sleep(1)
+    recv = pSockSSL.recv(1024)
+    print(recv.decode())
+    sleep(1)
+    recv = pSockSSL.recv(1024)
+    print(recv.decode())
+    # for s in recv.decode().splitlines():
+    #     print(s)
 
 def delete_message():
     mailserver2 = 'pop.mail.ru'
@@ -122,7 +132,7 @@ def delete_message():
     pSockSSL.close()
     pSock.close()
 
-# send_message()
+get_list()
 # sock = socket()
 # sock.bind(('', 9090))
 # sock.listen(1)
